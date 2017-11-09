@@ -3,6 +3,7 @@ package com.javgame.pay;
 import android.app.Activity;
 
 import com.javgame.Integration.ComponentFactory;
+import com.javgame.Integration.IActivityListener;
 import com.javgame.utility.LogUtil;
 
 import static com.javgame.utility.Constants.TAG;
@@ -29,7 +30,7 @@ public class PaySdk {
     private String shareFriendsCallObj;
     private String shareFriendsCallFunc;
 
-
+    IActivityListener activityListener;
     private IPay mPay;
     private IWXShare mWxShare;
 
@@ -52,13 +53,20 @@ public class PaySdk {
                 mWxShare = (IWXShare) obj;
                 LogUtil.i(TAG, "IWXShare create");
             }
+            if(obj instanceof IActivityListener){
+                activityListener = (IActivityListener) obj;
+                activityListener.onCreate();
+                LogUtil.i(TAG, "IActivityListener create");
+            }
         }
     }
 
     public Object getPayObject(){
         return ComponentFactory.getInstance().getPay();
     }
-
+    public IActivityListener getActivityListener() {
+        return activityListener;
+    }
     public void pay(String callObj, String callFunc,String data) {
         if (mPay != null) {
             objCallBack = callObj;
