@@ -64,9 +64,11 @@ public class PaySdk {
     public Object getPayObject(){
         return ComponentFactory.getInstance().getPay();
     }
+
     public IActivityListener getActivityListener() {
         return activityListener;
     }
+
     public void pay(String callObj, String callFunc,String data) {
         if (mPay != null) {
             objCallBack = callObj;
