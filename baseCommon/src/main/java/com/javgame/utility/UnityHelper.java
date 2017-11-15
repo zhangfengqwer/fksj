@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.javgame.Integration.IntegrationManager;
 import com.javgame.app.UnityPlayerActivity;
+import com.javgame.weixin.WXShare;
 
 import static com.javgame.utility.Constants.TAG;
 
@@ -62,7 +63,17 @@ public class UnityHelper {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                IntegrationManager.getInstance().wxShareFriends(callObj, callFunc,data);
+                WXShare.getInstance().wxShareFriends(callObj, callFunc,data);
+            }
+        });
+    }
+
+    public static void wxShareFriendsCircle(final String callObj, final String callFunc, final byte[] data) {
+        LogUtil.d(TAG, " wxShareFriendsCircle: " + data + " callObj :" + callObj + " callFunc :" + callFunc);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WXShare.getInstance().wxShareFriendsCircle(callObj, callFunc,data);
             }
         });
     }

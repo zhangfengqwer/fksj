@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.javgame.login.UserSdk;
 import com.javgame.pay.PaySdk;
+import com.javgame.weixin.WXShare;
 
 /**
  * @author zhangf
@@ -44,9 +45,11 @@ public class IntegrationManager {
      * @param activity
      */
     public void init(Activity activity) {
+        WXShare.getInstance().init(activity);
         ComponentFactory.getInstance().init(activity);
         UserSdk.getInstance().init(activity);
         PaySdk.getInstance().Init(activity);
+
     }
 
     public void login(Activity activity, String callObj, String callFunc, String data) {
@@ -57,11 +60,17 @@ public class IntegrationManager {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onDestroy();
         }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onDestroy();
+        }
     }
 
     public void onStart() {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onStart();
+        }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onStart();
         }
     }
 
@@ -69,11 +78,17 @@ public class IntegrationManager {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onStop();
         }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onStop();
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onActivityResult(requestCode, resultCode, data);
+        }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -81,11 +96,17 @@ public class IntegrationManager {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onResume();
         }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onResume();
+        }
     }
 
     public void onPause() {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onPause();
+        }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onPause();
         }
     }
 
@@ -93,13 +114,12 @@ public class IntegrationManager {
         if (UserSdk.getInstance().getActivityListener() != null) {
             UserSdk.getInstance().getActivityListener().onRestart();
         }
+        if (PaySdk.getInstance().getActivityListener() != null) {
+            PaySdk.getInstance().getActivityListener().onRestart();
+        }
     }
 
     public void pay(String callObj, String callFunc, String data) {
         PaySdk.getInstance().pay(callObj, callFunc, data);
-    }
-
-    public void wxShareFriends(String callObj, String callFunc, String data) {
-        PaySdk.getInstance().wxShareFriends(callObj,callFunc,data);
     }
 }

@@ -101,12 +101,12 @@ public class PayHelper {
     }
 
 
-    public static OrderResponse parserOrderResponse(String response, Order order) {
-        OrderResponse orderResponse = XMLhelper.parserOrderResponse(response);
-        order.orderID = orderResponse.getOrderID();
-        order.expand = orderResponse.getExpand();
-        return orderResponse ;
-    }
+//    public static OrderResponse parserOrderResponse(String response, Order order) {
+//        OrderResponse orderResponse = XMLhelper.parserOrderResponse(response);
+//        order.orderID = orderResponse.get();
+//        order.expand = orderResponse.getExpand();
+//        return orderResponse ;
+//    }
 	
 
     public static String encode(String string) {

@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 android {
@@ -27,6 +29,24 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            // 统一命名打包好的正式渠道包（命名规则自定）
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                // 输出apk名称为boohee_v1.0_2015-01-15_wandoujia.apk
+//                        def fileName = "boohee_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                def fileName = "fksj_${versionName}_${versionCode}.apk"
+                output.outputFile = new File("E:\\StudioWork\\fksj\\" + getFormatDate(), fileName)
+            }
+        }
+    }
+}
+
+def getFormatDate() {
+    java.text.DateFormat format = new SimpleDateFormat("yyyyMMdd")
+    return format.format(new Date()) + "0000"
 }
 
 dependencies {

@@ -10,14 +10,12 @@ import com.javgame.Integration.IActivityListener;
 import com.javgame.login.IUser;
 import com.javgame.login.UserSdk;
 import com.javgame.utility.CommonUtils;
+import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
+import com.javgame.weixin.WXShare;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
-import com.tencent.mm.opensdk.modelmsg.GetMessageFromWX;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
@@ -39,7 +37,7 @@ import static com.javgame.utility.Constants.TAG;
 
 public class Login implements IUser, IActivityListener {
 
-    public static IWXAPI wxApi;
+    public IWXAPI wxApi;
     private UserInfo mInfo;
     private Tencent mTencent;
     private static String token;
@@ -58,9 +56,7 @@ public class Login implements IUser, IActivityListener {
         mTencent = Tencent.createInstance(GameConfig.QQ_APP_ID, getActivity());
 
         //注册微信到app中
-        wxApi = WXAPIFactory.createWXAPI(getActivity(), GameConfig.WX_APP_ID, true);
-        wxApi.registerApp(GameConfig.WX_APP_ID);
-
+        wxApi = WXShare.getInstance().getWXApi();
     }
 
 
@@ -210,7 +206,6 @@ public class Login implements IUser, IActivityListener {
     public void onResume() {
         LogUtil.d(TAG, "onResume");
         UnityPlayer.UnitySendMessage("AndroidCallBack", "OnResumeCallBack", "");
-
     }
 
     @Override
@@ -231,7 +226,6 @@ public class Login implements IUser, IActivityListener {
             Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
         }
     }
-
 
     @Override
     public void logout() {

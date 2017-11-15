@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">疯狂升级</string>
-
-
   <string name="packageLogin">com.javgame.fksj.Login</string>
   <string name="packagePay">com.javgame.fksj.Pay</string>
 </resources>

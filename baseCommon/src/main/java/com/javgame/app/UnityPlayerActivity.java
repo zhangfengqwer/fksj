@@ -1,7 +1,10 @@
 package com.javgame.app;
 
+import com.javgame.utility.GameConfig;
 import com.javgame.utility.UnityHelper;
 import com.tencent.connect.common.Constants;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.Tencent;
 import com.unity3d.player.*;
 import android.app.Activity;
@@ -18,6 +21,7 @@ public class UnityPlayerActivity extends Activity
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
     public static Activity realActivity; //unity获取该变量
+
     private ActivityHelper activityHelper = new ActivityHelper();
     // Setup activity layout
     @Override protected void onCreate (Bundle savedInstanceState)

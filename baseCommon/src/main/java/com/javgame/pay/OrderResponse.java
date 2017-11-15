@@ -1,58 +1,127 @@
 package com.javgame.pay;
 
+import com.google.gson.annotations.SerializedName;
+
 public class OrderResponse {
-    
-    /**
-     *   状态 0-异常,  1-正常
-     */
-    private int status;  
-    
+
 	/**
-     * 正常返回订单ID，异常返回异常信息
-     */
-    private String  msg;
-    
-    /**
-     * 扩展信息，自定义
-     * 1、传给通知接口的验证串，Extra
-     * 2、prepay_id（微信支付使用）
-     */
-    private String  expand;
-    
-    
-    /**
-     * 根据状态判断返回内容
-     * @return
-     */
-    public String getErrorMessage() {
-        return status == 0 ? msg : "";
-   }
-   
-    /**
-     * 根据状态判断返回订单id
-     * @return
-     */
-   public String getOrderID() {
-        return status == 1 ? msg : "";
-   }
-   
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	
-	public int getStatus() {
-		return status;
+	 * code : 1
+	 * message :
+	 * data : {"appId":"wxa2c2802e8fedd592","noncestr":"56b4a9e63eee4305a810c3498b33526a","package":"Sign=WXPay","partnerid":"1491388672","prepayid":"wx20171114140045ab81876d6a0019750920","sign":"0ddfbd5a38aba5f3c5a045a7d2775744","timestamp":"1510639235","trade_no":"10014"}
+	 */
+
+	private int code;
+	private String message;
+	private DataBean data;
+
+	public int getCode() {
+		return code;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setCode(int code) {
+		this.code = code;
 	}
-	public String getExpand() {
-		return expand;
+
+	public String getMessage() {
+		return message;
 	}
-	public void setExpand(String expand) {
-		this.expand = expand;
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
-	
-    
+
+	public DataBean getData() {
+		return data;
+	}
+
+	public void setData(DataBean data) {
+		this.data = data;
+	}
+
+	public static class DataBean {
+		/**
+		 * appId : wxa2c2802e8fedd592
+		 * noncestr : 56b4a9e63eee4305a810c3498b33526a
+		 * package : Sign=WXPay
+		 * partnerid : 1491388672
+		 * prepayid : wx20171114140045ab81876d6a0019750920
+		 * sign : 0ddfbd5a38aba5f3c5a045a7d2775744
+		 * timestamp : 1510639235
+		 * trade_no : 10014
+		 */
+
+		private String appId;
+		private String noncestr;
+		@SerializedName("package")
+		private String packageX;
+		private String partnerid;
+		private String prepayid;
+		private String sign;
+		private String timestamp;
+		private String trade_no;
+
+		public String getAppId() {
+			return appId;
+		}
+
+		public void setAppId(String appId) {
+			this.appId = appId;
+		}
+
+		public String getNoncestr() {
+			return noncestr;
+		}
+
+		public void setNoncestr(String noncestr) {
+			this.noncestr = noncestr;
+		}
+
+		public String getPackageX() {
+			return packageX;
+		}
+
+		public void setPackageX(String packageX) {
+			this.packageX = packageX;
+		}
+
+		public String getPartnerid() {
+			return partnerid;
+		}
+
+		public void setPartnerid(String partnerid) {
+			this.partnerid = partnerid;
+		}
+
+		public String getPrepayid() {
+			return prepayid;
+		}
+
+		public void setPrepayid(String prepayid) {
+			this.prepayid = prepayid;
+		}
+
+		public String getSign() {
+			return sign;
+		}
+
+		public void setSign(String sign) {
+			this.sign = sign;
+		}
+
+		public String getTimestamp() {
+			return timestamp;
+		}
+
+		public void setTimestamp(String timestamp) {
+			this.timestamp = timestamp;
+		}
+
+		public String getTrade_no() {
+			return trade_no;
+		}
+
+		public void setTrade_no(String trade_no) {
+			this.trade_no = trade_no;
+		}
+	}
 }

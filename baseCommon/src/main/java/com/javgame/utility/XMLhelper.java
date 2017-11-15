@@ -30,35 +30,7 @@ public class XMLhelper {
      * @param content
      * @return
      */
-    public static OrderResponse parserOrderResponse(String content) {
-    	OrderResponse orderResponse = new OrderResponse();
-		try {
-			XmlPullParser parser = Xml.newPullParser();
-			parser.setInput(new StringReader(content));
-			int event = parser.getEventType();
-			while (event != XmlPullParser.END_DOCUMENT) {
-				if(event == XmlPullParser.START_TAG){
-					String nodeName=parser.getName();
-					if(TextUtils.equals("status",nodeName)){
-						orderResponse.setStatus(Integer.valueOf(parser.nextText())); 
-					}else if(TextUtils.equals("msg",nodeName)){
-						orderResponse.setMsg(parser.nextText()); 
-					}else if(TextUtils.equals("expand",nodeName)){
-						orderResponse.setExpand(parser.nextText()); 
-					}
-				}
-				event = parser.next();
-			}
-		} catch (XmlPullParserException e) {
-			Log.e(TAG,"parse xml error",e);
-		}catch (IOException e) {
-			Log.e(TAG,"read xml error",e);
-		}catch(NumberFormatException e){
-			Log.e(TAG,"parse string to int error",e);
-		}
-		return orderResponse;
-	}
-    
+
     /**
      * 解析服务端返回的xml格式
      * @param content

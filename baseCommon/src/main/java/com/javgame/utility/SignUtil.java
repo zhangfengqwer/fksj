@@ -65,7 +65,7 @@ public class SignUtil {
     }
 	
 	public static String md5(String signString) {
-        Log.d(TAG, "md5signString " + signString);
+//        Log.d(TAG, "md5signString " + signString);
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(signString.getBytes("utf-8"));
