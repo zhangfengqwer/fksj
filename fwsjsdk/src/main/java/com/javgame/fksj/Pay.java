@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.javgame.Integration.IActivityListener;
+import com.javgame.alipay.AliPay;
 import com.javgame.login.UserSdk;
 import com.javgame.pay.IPay;
 import com.javgame.pay.OrderResponse;
+import com.javgame.pay.PaySdk;
+import com.javgame.utility.Constants;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
 import com.javgame.utility.SignUtil;
@@ -43,8 +46,16 @@ public class Pay implements IPay {
     @Override
     public void pay(OrderResponse response) {
         LogUtil.d(TAG, "Trade_no:" + response.getData().getTrade_no());
-        callWXPay(response);
+        String payType = PaySdk.getInstance().getPayType();
+
+        if (Constants.PAY_TYPE_WX.equals(payType)) {
+            callWXPay(response);
+        } else if (Constants.PAY_TYPE_ALIPAY.equals(payType)) {
+            LogUtil.d(TAG, "orderInfo:" + response.getData().getSign());
+            AliPay.payV2(response.getData().getSign());
+        }
     }
+
 
     private void callWXPay(final OrderResponse response) {
         PayReq request = new PayReq();

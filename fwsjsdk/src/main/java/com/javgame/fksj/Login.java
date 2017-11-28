@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alipay.sdk.app.EnvUtils;
 import com.javgame.Integration.IActivityListener;
 import com.javgame.login.IUser;
 import com.javgame.login.UserSdk;
@@ -53,6 +54,8 @@ public class Login implements IUser, IActivityListener {
 
     @Override
     public void onCreate() {
+//        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+
         mTencent = Tencent.createInstance(GameConfig.QQ_APP_ID, getActivity());
 
         //注册微信到app中

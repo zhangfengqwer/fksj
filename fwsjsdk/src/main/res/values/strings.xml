@@ -3,4 +3,6 @@
   <string name="app_name">疯狂升级</string>
   <string name="packageLogin">com.javgame.fksj.Login</string>
   <string name="packagePay">com.javgame.fksj.Pay</string>
+  <!--1：表示是测试包，其余为正式环境-->
+  <string name="isTest">1</string>
 </resources>

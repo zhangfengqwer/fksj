@@ -66,6 +66,9 @@ public class AppInfoUtil {
 		public static String getChannelName(Context activity) {
 	        return AndroidUtil.getStringResource(activity, "channelName");
 	    }
+	    public static String getIsTest(Context activity) {
+	        return AndroidUtil.getStringResource(activity, "isTest");
+	    }
 		
 		public static int getGameID(Activity activity) {
 	        return AndroidUtil.getIntMataData(activity, "javGameID");

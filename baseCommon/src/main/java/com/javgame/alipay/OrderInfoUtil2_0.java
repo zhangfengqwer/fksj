@@ -68,30 +68,34 @@ public class OrderInfoUtil2_0 {
      * @param target_id
      * @return
      */
-    public static Map<String, String> buildOrderParamMap(String app_id, boolean rsa2) {
+    public static Map<String, String> buildOrderParamMap(String app_id) {
         Map<String, String> keyValues = new HashMap<String, String>();
-        Map<String, String> contentValues = new HashMap<String, String>();
         keyValues.put("app_id", app_id);
+
+        Map<String, String> contentValues = new HashMap<String, String>();
 
             contentValues.put("timeout_express", "30m");
             contentValues.put("product_code", "QUICK_MSECURITY_PAY");
             contentValues.put("total_amount", "0.01");
-            contentValues.put("subject", "元宝");
-            contentValues.put("body", "这是一条测试数据");
-            contentValues.put("out_trade_no", getOutTradeNo());
+            contentValues.put("subject", "10元宝");
+            contentValues.put("out_trade_no", "10143");
 
         keyValues.put("biz_content", new JSONObject(contentValues).toString());
-//		keyValues.put("biz_content", "{\"timeout_express\":\"30m\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"total_amount\":\"1\",\"subject\":\"1\",\"body\":\"我是测试数据\",\"out_trade_no\":\"" + getOutTradeNo() +  "\"}");
 
         keyValues.put("charset", "utf-8");
 
         keyValues.put("method", "alipay.trade.app.pay");
 
-        keyValues.put("sign_type", rsa2 ? "RSA2" : "RSA");
+        keyValues.put("sign_type", "RSA2");
 
-        keyValues.put("timestamp", "2016-07-29 16:55:53");
+//        Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String str = sdf.format(date);
+        keyValues.put("timestamp", "2017-11-16 11:14:54");
 
         keyValues.put("version", "1.0");
+
+        keyValues.put("notify_url", "http://mapi.javgame.com:14123/api/mNotify/notify_Aplipay");
 
         return keyValues;
     }

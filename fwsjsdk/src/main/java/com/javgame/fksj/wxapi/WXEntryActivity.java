@@ -1,6 +1,7 @@
 package com.javgame.fksj.wxapi;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -65,7 +66,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(final BaseResp resp) {
-        LogUtil.d(Constants.TAG, "返回：" + "Type:" + resp.getType() + "\nstate:" + resp.errCode);
+        LogUtil.d(Constants.TAG, "返回：" + "Type:" + resp.getType() + "\nerrCode:" + resp.errCode);
 
         //登录返回
         if (resp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
@@ -77,22 +78,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }
 
         finish();
-    }
-
-    private void payHandler(BaseResp resp) {
-        int errorCode = resp.errCode;
-        switch (errorCode) {
-            case BaseResp.ErrCode.ERR_OK:
-                break;
-            case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                //用户拒绝
-                break;
-            case BaseResp.ErrCode.ERR_USER_CANCEL:
-                //用户取消
-                break;
-            default:
-                break;
-        }
     }
 
     private void loginHandler(BaseResp resp) {
@@ -107,6 +92,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 map.put("appId", GameConfig.WX_APP_ID);
                 map.put("code", code);
                 map.put("openId", "");
+                LogUtil.d(TAG, "给web发送了请求，code:" + code);
                 OkHttpUtils
                         .postString()
                         .url(GameConfig.WECHAT_LOGIN_URL)
@@ -125,13 +111,15 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 LogUtil.d(TAG, "onResponse" + response);
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    int code = jsonObject.getInt("code");
+
+                                    String data = jsonObject.getString("data");
+                                    JSONObject dataJson = new JSONObject(data);
+                                    int code = dataJson.getInt("code");
                                     if (code != 1) {
                                         CommonUtils.showToast(WXEntryActivity.this, "微信登录web返回失败");
                                         return;
                                     }
-                                    String data = jsonObject.getString("data");
-                                    JSONObject dataJson = new JSONObject(data);
+
                                     nickname = dataJson.getString("name");
                                     unionid = dataJson.getString("expand");
                                     handlerResult();
@@ -140,6 +128,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 }
                             }
                         });
+
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 //用户拒绝
@@ -162,6 +151,5 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         map.put("figureurl", "");
         Log.d(TAG, new JSONObject(map).toString());
         UserSdk.getInstance().loginResult(new JSONObject(map).toString());
-
     }
 }

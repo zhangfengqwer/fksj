@@ -6,7 +6,8 @@ import java.text.MessageFormat;
 
 public class LogUtil {
 
-	private static int DEBUG_LOG = 1;
+	//0是正式包，1是测试包
+	public static int DEBUG_LOG = 1;
 	private static final int INFO = DEBUG_LOG;
 	private static final int DEBUG = DEBUG_LOG;
 	private static final int WARNING = DEBUG_LOG;

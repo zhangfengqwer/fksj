@@ -3,10 +3,14 @@ package com.javgame.Integration;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.javgame.login.UserSdk;
 import com.javgame.pay.PaySdk;
+import com.javgame.utility.LogUtil;
 import com.javgame.weixin.WXShare;
+import com.unity3d.player.UnityPlayer;
 
 /**
  * @author zhangf
@@ -45,6 +49,7 @@ public class IntegrationManager {
      * @param activity
      */
     public void init(Activity activity) {
+
         WXShare.getInstance().init(activity);
         ComponentFactory.getInstance().init(activity);
         UserSdk.getInstance().init(activity);
@@ -119,7 +124,7 @@ public class IntegrationManager {
         }
     }
 
-    public void pay(String callObj, String callFunc, String data) {
-        PaySdk.getInstance().pay(callObj, callFunc, data);
+    public void pay(String paytype, String callObj, String callFunc, String data) {
+        PaySdk.getInstance().pay(paytype,callObj, callFunc, data);
     }
 }

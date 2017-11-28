@@ -1,6 +1,7 @@
 package com.javgame.login;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.javgame.Integration.ComponentFactory;
 import com.javgame.Integration.IActivityListener;

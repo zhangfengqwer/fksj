@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.javgame.Integration.IntegrationManager;
+import com.javgame.alipay.AliPay;
 import com.javgame.app.UnityPlayerActivity;
 import com.javgame.weixin.WXShare;
 
@@ -22,9 +23,10 @@ public class UnityHelper {
 
     /**
      * 登录
-     * @param callObj unity3d中接收消息的gamaObject的名称
+     *
+     * @param callObj  unity3d中接收消息的gamaObject的名称
      * @param callFunc unity3d中接收消息的函数名称
-     * @param data 数据格式:json
+     * @param data     数据格式:json
      */
     public static void login(final String callObj, final String callFunc, final String data) {
         Log.d(TAG, " login  callObj: " + callObj + " callFunc :" + callFunc);
@@ -45,12 +47,12 @@ public class UnityHelper {
      * @param callObj
      * @param callFunc
      */
-    public static void pay(final String callObj, final String callFunc, final String data) {
-        LogUtil.d(TAG, " Pay " + data + " callObj " + callObj + " callFunc " + callFunc);
+    public static void pay(final String paytype, final String callObj, final String callFunc, final String data) {
+        LogUtil.d(TAG, "paytype:" + paytype + " Pay " + data + " callObj " + callObj + " callFunc " + callFunc);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                IntegrationManager.getInstance().pay(callObj, callFunc,data);
+                IntegrationManager.getInstance().pay(paytype, callObj, callFunc, data);
             }
         });
     }
@@ -63,7 +65,7 @@ public class UnityHelper {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WXShare.getInstance().wxShareFriends(callObj, callFunc,data);
+                WXShare.getInstance().wxShareFriends(callObj, callFunc, data);
             }
         });
     }
@@ -73,8 +75,13 @@ public class UnityHelper {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WXShare.getInstance().wxShareFriendsCircle(callObj, callFunc,data);
+                WXShare.getInstance().wxShareFriendsCircle(callObj, callFunc, data);
             }
         });
+    }
+
+    public static String getIsTest() {
+        LogUtil.d(TAG, "getIsTest:" + AppInfoUtil.getIsTest(getActivity()));
+        return AppInfoUtil.getIsTest(getActivity());
     }
 }

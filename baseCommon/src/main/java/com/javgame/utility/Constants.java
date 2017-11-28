@@ -24,7 +24,7 @@ public class Constants {
     public static final int nnID=270;
     public static final String PayCodeKey ="payCode" ;
     public static String TAG = "FKSJTAG";
-    public static final String PAY_TYPE_WX="weixin";
-    public static final String PAY_TYPE_ALIPAY="alipayv2";
+    public static final String PAY_TYPE_WX="weixinpay";
+    public static final String PAY_TYPE_ALIPAY="alipay";
 //    public static final String[] PAY_TYPE_ARRAY = {PAY_TYPE_WX,PAY_TYPE_ALIPAY};
 }
