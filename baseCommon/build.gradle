@@ -3,12 +3,10 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 21
     buildToolsVersion "25.0.3"
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 21
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -28,4 +26,6 @@ dependencies {
     compile 'com.zhy:okhttputils:2.0.0'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile files('libs/glide-3.7.0.jar')
+    compile 'com.github.tibolte:elasticdownload:1.0.+'
 }

@@ -2,15 +2,26 @@ package com.javgame.Integration;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.javgame.login.UserSdk;
 import com.javgame.pay.PaySdk;
+import com.javgame.update.DownLoadApk;
+import com.javgame.update.DownloadService;
+import com.javgame.update.InstallUtil;
 import com.javgame.utility.LogUtil;
 import com.javgame.weixin.WXShare;
 import com.unity3d.player.UnityPlayer;
+
+import static com.javgame.utility.Constants.TAG;
 
 /**
  * @author zhangf
@@ -21,6 +32,9 @@ public class IntegrationManager {
 
     public static final String TAG = IntegrationManager.class.getSimpleName();
     private static IntegrationManager mIntegrationManager;
+    private Activity activity;
+
+
 
     public static IntegrationManager getInstance() {
         if (mIntegrationManager == null) {
@@ -48,14 +62,18 @@ public class IntegrationManager {
      *
      * @param activity
      */
-    public void init(Activity activity) {
 
+
+    public void init(Activity activity) {
+        this.activity = activity;
         WXShare.getInstance().init(activity);
         ComponentFactory.getInstance().init(activity);
         UserSdk.getInstance().init(activity);
         PaySdk.getInstance().Init(activity);
-
+        DownLoadApk.getInstance().init(activity);
     }
+
+
 
     public void login(Activity activity, String callObj, String callFunc, String data) {
         UserSdk.getInstance().login(callObj, callFunc, data);
@@ -126,5 +144,9 @@ public class IntegrationManager {
 
     public void pay(String paytype, String callObj, String callFunc, String data) {
         PaySdk.getInstance().pay(paytype,callObj, callFunc, data);
+    }
+
+    public void downLoadApk() {
+        DownLoadApk.getInstance().downLoadApk();
     }
 }

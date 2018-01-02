@@ -1,17 +1,24 @@
 package com.javgame.app;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 
+import com.javgame.utility.AndroidUtil;
+import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
 import com.unity3d.player.UnityPlayer;
+
+import static com.javgame.utility.Constants.TAG;
 
 
 public class UnityPlayerActivity extends Activity {
@@ -20,11 +27,12 @@ public class UnityPlayerActivity extends Activity {
 
     private ActivityHelper activityHelper = new ActivityHelper();
 
-    public  final String OFFICIAL_URL = "http://fkmpay.51v.cn";
-    public  final String TEST_URL = "http://mapi.javgame.com:14123";
+    public final String OFFICIAL_URL = "http://fkmpay.51v.cn";
+    public final String OFFICIAL_SHARE_URL = "http://xyyl.hy51v.com";
 
     private boolean isTest = false;
     private boolean isShowLog = true;
+
     // Setup activity layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +45,29 @@ public class UnityPlayerActivity extends Activity {
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
 
-        if(!isShowLog){
+        if (!isShowLog) {
             LogUtil.DEBUG_LOG = 0;
             UnityPlayer.UnitySendMessage("AndroidCallBack", "SetLogIsShow", "0");
         }
-        if(!isTest){
+        if (!isTest) {
             GameConfig.BASE_URL = OFFICIAL_URL;
+            LogUtil.d(TAG, " GameConfig.BASE_URL:" + GameConfig.BASE_URL);
+            GameConfig.SHARE_BASE_URL = OFFICIAL_SHARE_URL;
             UnityPlayer.UnitySendMessage("AndroidCallBack", "SetIsTest", "0");
         }
+
+        GameConfig.init();
+        String channelName = AndroidUtil.getMataData(this, "UMENG_CHANNEL");
+
+        //设置apk更新路径
+        GameConfig.APK_URL += "fksj_" + channelName + ".apk";
+
+        LogUtil.d(TAG, " GameConfig.APK_URL:" + GameConfig.APK_URL);
+        UnityPlayer.UnitySendMessage("AndroidCallBack", "SetVersionCode", AppInfoUtil.getVersionName(this));
+
         activityHelper.onCreate(this, savedInstanceState);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

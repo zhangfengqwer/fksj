@@ -64,7 +64,6 @@ public class ComponentFactory {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

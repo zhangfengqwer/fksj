@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 
 import com.javgame.utility.LogUtil;
 import com.javgame.weixin.WXShare;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;

@@ -1,7 +1,6 @@
 package com.javgame.fksj.wxapi;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import com.javgame.utility.CommonUtils;
 import com.javgame.utility.Constants;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
-import com.javgame.weixin.WXShare;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -22,6 +20,7 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.unity3d.player.UnityPlayer;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -71,10 +70,21 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         //登录返回
         if (resp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
             loginHandler(resp);
+            LogUtil.d(TAG, "点击了登录:");
         }
         //分享返回
         else if (resp.getType() == ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX) {
-
+            switch (resp.errCode) {
+                case BaseResp.ErrCode.ERR_OK:
+                    UnityPlayer.UnitySendMessage("AndroidCallBack", "OnShareSuccess", "0");
+                    break;
+                case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                    //用户拒绝
+                    break;
+                case BaseResp.ErrCode.ERR_USER_CANCEL:
+                    //用户取消
+                    break;
+            }
         }
 
         finish();
@@ -93,6 +103,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 map.put("code", code);
                 map.put("openId", "");
                 LogUtil.d(TAG, "给web发送了请求，code:" + code);
+
                 OkHttpUtils
                         .postString()
                         .url(GameConfig.WECHAT_LOGIN_URL)
@@ -116,7 +127,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     JSONObject dataJson = new JSONObject(data);
                                     int code = dataJson.getInt("code");
                                     if (code != 1) {
-                                        CommonUtils.showToast(WXEntryActivity.this, "微信登录web返回失败");
+//                                        CommonUtils.showToast(WXEntryActivity.this, "微信登录web返回失败");
+                                        LogUtil.e(TAG,"微信登录web返回失败");
                                         return;
                                     }
 
@@ -128,7 +140,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 }
                             }
                         });
-
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 //用户拒绝

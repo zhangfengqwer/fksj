@@ -1,6 +1,7 @@
 package com.javgame.utility;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.javgame.Integration.IntegrationManager;
@@ -70,7 +71,7 @@ public class UnityHelper {
         });
     }
 
-    public static void wxShareFriendsCircle(final String callObj, final String callFunc, final byte[] data) {
+    public static void wxShareFriendsCircle(final String callObj, final String callFunc, final String data) {
         LogUtil.d(TAG, " wxShareFriendsCircle: " + data + " callObj :" + callObj + " callFunc :" + callFunc);
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -83,5 +84,26 @@ public class UnityHelper {
     public static String getIsTest() {
         LogUtil.d(TAG, "getIsTest:" + AppInfoUtil.getIsTest(getActivity()));
         return AppInfoUtil.getIsTest(getActivity());
+    }
+
+    public static String getVersionName(){
+        String version = AppInfoUtil.getVersionName(getActivity());
+        LogUtil.d(TAG, version);
+        return version;
+    }
+
+    public static String getChannelName(){
+        String version = AppInfoUtil.getChannelName(getActivity());
+        LogUtil.d(TAG, version);
+        return version;
+    }
+
+    public static void downLoadApk(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                IntegrationManager.getInstance().downLoadApk();
+            }
+        });
     }
 }

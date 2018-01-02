@@ -187,10 +187,13 @@ public class PaySdk {
             map.put("ProductDesc", goods_name);
             map.put("price", price);
             map.put("total_amount", price);
+//            map.put("total_amount", "0.01");
             map.put("version", AppInfoUtil.getVersionName(activity));
             map.put("PhoneModel", Build.MODEL);
             map.put("expand", "");
             LogUtil.d(TAG, "pay:" + new JSONObject(map).toString());
+            LogUtil.d(TAG, "url:" + url);
+
             OkHttpUtils
                     .postString()
                     .url(url)

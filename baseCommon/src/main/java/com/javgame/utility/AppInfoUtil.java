@@ -63,9 +63,14 @@ public class AppInfoUtil {
 	        return  activity.getApplicationInfo().packageName;
 	    }
 		
+//		public static String getChannelName(Context activity) {
+//	        return AndroidUtil.getStringResource(activity, "channelName");
+//	    }
+
 		public static String getChannelName(Context activity) {
-	        return AndroidUtil.getStringResource(activity, "channelName");
-	    }
+			return AndroidUtil.getMataData((Activity) activity, "UMENG_CHANNEL");
+		}
+
 	    public static String getIsTest(Context activity) {
 	        return AndroidUtil.getStringResource(activity, "isTest");
 	    }
@@ -107,7 +112,6 @@ public class AppInfoUtil {
 			Log.e("AppInfoUtil", "cann't find package name -- com.tencent.mm");
 		}
 		return false;
-		
 	}
 	
 	

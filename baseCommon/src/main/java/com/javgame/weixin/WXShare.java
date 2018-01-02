@@ -3,8 +3,11 @@ package com.javgame.weixin;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Message;
 
+import com.bumptech.glide.Glide;
 import com.javgame.app.R;
+import com.javgame.utility.CommonUtils;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
 import com.javgame.utility.Util;
@@ -15,6 +18,10 @@ import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.util.concurrent.ExecutionException;
+
+import static com.javgame.utility.AndroidUtil.TAG;
 
 /**
  * @author zhangf
@@ -41,7 +48,7 @@ public class WXShare {
     public void init(Activity activity) {
         this.activity = activity;
         //微信api
-        wxApi = WXAPIFactory.createWXAPI(activity, GameConfig.WX_APP_ID,true);
+        wxApi = WXAPIFactory.createWXAPI(activity, GameConfig.WX_APP_ID, true);
         wxApi.registerApp(GameConfig.WX_APP_ID);
     }
 
@@ -49,23 +56,25 @@ public class WXShare {
         return wxApi;
     }
 
-    public void wxShareFriendsCircle(String callObj, String callFunc, byte[] data) {
-        try{
+    public void wxShareFriendsCircle(String callObj, String callFunc, final String data) {
+        if (wxApi.isWXAppInstalled()) {
             sendImage(data);
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d(com.javgame.utility.Constants.TAG,e.getMessage());
+        } else {
+            CommonUtils.showToast(activity, "还未安装微信！");
         }
-
     }
 
     public void wxShareFriends(String callObj, String callFunc, String data) {
-        sendWebPager(data);
+        if (wxApi.isWXAppInstalled()) {
+            sendWebPager(data);
+        } else {
+            CommonUtils.showToast(activity, "还未安装微信！");
+        }
     }
 
     public void sendWebPager(String data) {
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "http://www.qq.com";
+        webpage.webpageUrl = GameConfig.APK_URL;
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "玩游戏就能赢奖，不信来试试！";
         msg.description = data;
@@ -97,23 +106,42 @@ public class WXShare {
         wxApi.sendReq(req);
     }
 
-    public void sendImage(byte[] data) {
-//        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-        Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.biaoti_denglujiangli);
-        WXImageObject imgObj = new WXImageObject(bmp);
+    public void sendImage(String data) {
 
-        WXMediaMessage msg = new WXMediaMessage();
-        msg.mediaObject = imgObj;
 
-        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
-        bmp.recycle();
-        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
 
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = buildTransaction("img");
-        req.message = msg;
-        req.scene = mTargetSceneQuan;
-        wxApi.sendReq(req);
+                    Bitmap bmp = Glide.with(activity)
+                            .load(GameConfig.SHARE_URL)
+                            .asBitmap()
+                            .centerCrop()
+                            .into(1280, 720)
+                            .get();
+                    WXImageObject imgObj = new WXImageObject(bmp);
+                    LogUtil.d(TAG, "GameConfig.SHARE_URL" + GameConfig.SHARE_URL);
+                    WXMediaMessage msg = new WXMediaMessage();
+                    msg.mediaObject = imgObj;
+
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, (int) (THUMB_SIZE * 0.5f), (int) (THUMB_SIZE * 0.5f), true);
+//                    bmp.recycle();
+                    msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = buildTransaction("img");
+                    req.message = msg;
+                    req.scene = mTargetSceneQuan;
+                    wxApi.sendReq(req);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+//        Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.biaoti_denglujiangli);
+
     }
 
     private String buildTransaction(final String type) {

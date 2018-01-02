@@ -10,10 +10,8 @@ android {
         applicationId "com.javgame.fksj"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 2
-        versionName "1.0.2"
-
-
+        versionCode 29
+        versionName "1.0.29"
     }
     buildTypes {
         release {
@@ -22,6 +20,21 @@ android {
         }
     }
 
+    productFlavors {
+        weixin {}
+        weixingzh {}
+        weixinshare {}
+        javgame {}
+        yunOS{}
+        kuchuan{}
+        aiqiyi{}
+        hy4399{}
+        sougou{}
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
+    }
 
     lintOptions {
         checkReleaseBuilds false
@@ -30,15 +43,28 @@ android {
         abortOnError false
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            // 统一命名打包好的正式渠道包（命名规则自定）
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                // 输出apk名称为boohee_v1.0_2015-01-15_wandoujia.apk
+    signingConfigs {
+        release {
+            keyAlias 'javgame'
+            keyPassword 'wer123'
+            storeFile file('..\\javgame.keystore')
+            storePassword 'wer123'
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    // 统一命名打包好的正式渠道包（命名规则自定）
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为boohee_v1.0_2015-01-15_wandoujia.apk
 //                        def fileName = "boohee_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-                def fileName = "fksj_${versionName}_${versionCode}.apk"
-                output.outputFile = new File("E:\\StudioWork\\fksj\\" + getFormatDate(), fileName)
+                        def fileName = "fksj_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File("E:\\StudioWork\\fksj\\" + getFormatDate()+"\\${versionName}_${versionCode}",fileName)
+                    }
+                }
             }
         }
     }
@@ -46,7 +72,7 @@ android {
 
 def getFormatDate() {
     java.text.DateFormat format = new SimpleDateFormat("yyyyMMdd")
-    return format.format(new Date()) + "0000"
+    return format.format(new Date())
 }
 
 dependencies {

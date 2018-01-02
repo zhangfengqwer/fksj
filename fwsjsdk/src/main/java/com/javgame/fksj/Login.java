@@ -1,15 +1,23 @@
 package com.javgame.fksj;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.alipay.sdk.app.EnvUtils;
 import com.javgame.Integration.IActivityListener;
 import com.javgame.login.IUser;
 import com.javgame.login.UserSdk;
+import com.javgame.update.DownloadService;
+import com.javgame.update.InstallUtil;
 import com.javgame.utility.CommonUtils;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
@@ -18,7 +26,6 @@ import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -48,27 +55,28 @@ public class Login implements IUser, IActivityListener {
     private String figureurl;
     private static HashMap<String, String> map;
 
+
+
     private Activity getActivity() {
         return UserSdk.getInstance().getActivity();
     }
-
     @Override
     public void onCreate() {
 //        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
-
         mTencent = Tencent.createInstance(GameConfig.QQ_APP_ID, getActivity());
-
         //注册微信到app中
         wxApi = WXShare.getInstance().getWXApi();
     }
 
-
     @Override
     public void login(String data) {
-
         if ("weixin".equals(data)) {
             LogUtil.d(TAG, "点击wexin");
-            send2Wx();
+            if(wxApi.isWXAppInstalled()){
+                send2Wx();
+            }else {
+                Toast.makeText(getActivity(),"还未安装微信！",Toast.LENGTH_SHORT).show();
+            }
         } else if ("qq".equals(data)) {
             LogUtil.d(TAG, "点击qq");
             doQQLogin();

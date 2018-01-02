@@ -56,7 +56,6 @@ public class Pay implements IPay {
         }
     }
 
-
     private void callWXPay(final OrderResponse response) {
         PayReq request = new PayReq();
 

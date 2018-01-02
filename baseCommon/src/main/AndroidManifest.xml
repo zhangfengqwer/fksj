@@ -17,8 +17,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
 
-    <application
-      >
+    <application>
 
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
@@ -55,6 +54,18 @@
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
 
+        <service android:name="com.javgame.update.DownloadService" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.javgame.fksj"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <!--元数据-->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
 
 </manifest>
