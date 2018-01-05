@@ -18,6 +18,7 @@ import com.javgame.login.IUser;
 import com.javgame.login.UserSdk;
 import com.javgame.update.DownloadService;
 import com.javgame.update.InstallUtil;
+import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.CommonUtils;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
@@ -145,11 +146,9 @@ public class Login implements IUser, IActivityListener {
 
     private void handlerResult() {
         map = new HashMap<>();
-        map.put("appid", GameConfig.QQ_APP_ID);
         map.put("code", openId);
         map.put("nickname", nickname);
-        map.put("platform", 101 + "");
-        map.put("figureurl", figureurl);
+        map.put("channelname", AppInfoUtil.getChannelName(getActivity()));
         Log.d(TAG, new JSONObject(map).toString());
         UserSdk.getInstance().loginResult(new JSONObject(map).toString());
     }
@@ -200,7 +199,6 @@ public class Login implements IUser, IActivityListener {
     @Override
     public void onPause() {
         LogUtil.d(TAG, "onPause");
-        UnityPlayer.UnitySendMessage("AndroidCallBack", "OnPauseCallBack", "");
     }
 
     @Override
@@ -216,7 +214,6 @@ public class Login implements IUser, IActivityListener {
     @Override
     public void onResume() {
         LogUtil.d(TAG, "onResume");
-        UnityPlayer.UnitySendMessage("AndroidCallBack", "OnResumeCallBack", "");
     }
 
     @Override

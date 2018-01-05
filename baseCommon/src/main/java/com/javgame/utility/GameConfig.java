@@ -1,5 +1,11 @@
 package com.javgame.utility;
 
+import android.app.Activity;
+
+import com.unity3d.player.UnityPlayer;
+
+import static com.javgame.utility.Constants.TAG;
+
 /**
  * @author zhangf
  * @date 2017/11/6
@@ -10,21 +16,66 @@ public class GameConfig {
     public static final String QQ_APP_ID = "101436232";
     public static final String WX_APP_ID = "wxa2c2802e8fedd592";
     public static final String ALI_APP_ID = "2017102309474098";
-    public static String BASE_URL = "http://mapi.javgame.com:14123";
+    public static final String HUAWEI_APP_ID = "100174463";
+    public static String TEST_BASE_URL = "http://mapi.javgame.com:14123";
+    public static String ONLINE_BASE_URL = "http://fkmpay.51v.cn/api";
+    public static String BASE_URL;
+
+    public static String TEST_BASE_FILE_URL = "http://fwdown.hy51v.com/test";
+    public static String ONLINE_BASE_FILE_URL = "http://fwdown.hy51v.com/online";
+    public static String BASE_FILE_URL;
+
     public static String WECHAT_LOGIN_URL;
     public static String WECHAT_PAY_URL;
     public static String ALI_PAY_URL;
+    public static String HUAWEI_PAY_URL;
 
-    public static String SHARE_BASE_URL = "http://hatest.d51v.com";
     public static String APK_URL;
     public static String SHARE_URL;
 
-    public static void init(){
-        WECHAT_LOGIN_URL = BASE_URL + "/api/mlogin/WechatLogin";
-        WECHAT_PAY_URL = BASE_URL + "/api/mpay/wechatPay";
-        ALI_PAY_URL = BASE_URL + "/api/mpay/aplipay";
 
-        APK_URL = "http://fwdown.hy51v.com/";
-        SHARE_URL = SHARE_BASE_URL + "/static/game/share-5.jpg";
+    private static boolean isTest = true;
+    private static boolean isShowLog = true;
+
+    public static void init(Activity activity){
+        String isTestString = AppInfoUtil.getIsTest(activity);
+        if("0".equals(isTestString)){
+            isTest = true;
+        }else {
+            isTest = false;
+        }
+
+        if (!isShowLog) {
+            LogUtil.DEBUG_LOG = 0;
+            UnityPlayer.UnitySendMessage("AndroidCallBack", "SetLogIsShow", "0");
+        }else{
+
+        }
+
+        if (!GameConfig.isTest) {
+            GameConfig.BASE_URL = ONLINE_BASE_URL;
+            GameConfig.BASE_FILE_URL = ONLINE_BASE_FILE_URL;
+            LogUtil.d(TAG, " GameConfig.BASE_URL:" + GameConfig.BASE_URL);
+            UnityPlayer.UnitySendMessage("AndroidCallBack", "SetIsTest", "0");
+        }else {
+            GameConfig.BASE_URL = TEST_BASE_URL;
+            GameConfig.BASE_FILE_URL = TEST_BASE_FILE_URL;
+            LogUtil.d(TAG, " GameConfig.BASE_URL:" + GameConfig.BASE_URL);
+            UnityPlayer.UnitySendMessage("AndroidCallBack", "SetIsTest", "1");
+        }
+
+        WECHAT_LOGIN_URL = BASE_URL + "/mLogin/WechatLogin";
+        WECHAT_PAY_URL = BASE_URL + "/mPay/wechatPay";
+        ALI_PAY_URL = BASE_URL + "/mPay/aplipay";
+        HUAWEI_PAY_URL = BASE_URL + "/mPay/trade";
+
+        SHARE_URL = BASE_FILE_URL + "/file/share-5.jpg";
+
+        //设置apk更新路径
+        APK_URL = BASE_FILE_URL + "/apk/";
+        String channelName = AndroidUtil.getMataData(activity, "UMENG_CHANNEL");
+        GameConfig.APK_URL += "fksj_" + channelName + ".apk";
+        LogUtil.d(TAG, " GameConfig.APK_URL:" + GameConfig.APK_URL);
+        UnityPlayer.UnitySendMessage("AndroidCallBack", "SetVersionCode", AppInfoUtil.getVersionName(activity));
     }
 }

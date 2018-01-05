@@ -27,12 +27,6 @@ public class UnityPlayerActivity extends Activity {
 
     private ActivityHelper activityHelper = new ActivityHelper();
 
-    public final String OFFICIAL_URL = "http://fkmpay.51v.cn";
-    public final String OFFICIAL_SHARE_URL = "http://xyyl.hy51v.com";
-
-    private boolean isTest = false;
-    private boolean isShowLog = true;
-
     // Setup activity layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,29 +39,10 @@ public class UnityPlayerActivity extends Activity {
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
 
-        if (!isShowLog) {
-            LogUtil.DEBUG_LOG = 0;
-            UnityPlayer.UnitySendMessage("AndroidCallBack", "SetLogIsShow", "0");
-        }
-        if (!isTest) {
-            GameConfig.BASE_URL = OFFICIAL_URL;
-            LogUtil.d(TAG, " GameConfig.BASE_URL:" + GameConfig.BASE_URL);
-            GameConfig.SHARE_BASE_URL = OFFICIAL_SHARE_URL;
-            UnityPlayer.UnitySendMessage("AndroidCallBack", "SetIsTest", "0");
-        }
-
-        GameConfig.init();
-        String channelName = AndroidUtil.getMataData(this, "UMENG_CHANNEL");
-
-        //设置apk更新路径
-        GameConfig.APK_URL += "fksj_" + channelName + ".apk";
-
-        LogUtil.d(TAG, " GameConfig.APK_URL:" + GameConfig.APK_URL);
-        UnityPlayer.UnitySendMessage("AndroidCallBack", "SetVersionCode", AppInfoUtil.getVersionName(this));
-
+        GameConfig.init(this);
         activityHelper.onCreate(this, savedInstanceState);
-    }
 
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -96,6 +71,7 @@ public class UnityPlayerActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        UnityPlayer.UnitySendMessage("AndroidCallBack", "OnPauseCallBack", "");
         mUnityPlayer.pause();
         activityHelper.onPause();
     }
@@ -104,6 +80,7 @@ public class UnityPlayerActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        UnityPlayer.UnitySendMessage("AndroidCallBack", "OnResumeCallBack", "");
         mUnityPlayer.resume();
         activityHelper.onResume();
     }

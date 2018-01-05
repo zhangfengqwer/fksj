@@ -18,6 +18,7 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.utils.Exceptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,14 +69,19 @@ public class PaySdk {
                     String orderResponse = (String) msg.obj;
 
                     if (Constants.PAY_TYPE_WX.equals(payType)) {
-                        OrderResponse response = new Gson().fromJson(orderResponse, OrderResponse.class);
-                        if (response.getCode() != 1) {
-                            CommonUtils.showToast(activity, "订单返回失败:" + response.getMessage());
-                            return;
+                        try {
+                            OrderResponse response = new Gson().fromJson(orderResponse, OrderResponse.class);
+                            if (response.getCode() != 1) {
+                                CommonUtils.showToast(activity, "订单返回失败:" + response.getMessage());
+                                return;
+                            }
+                            if (mPay != null) {
+                                mPay.pay(response);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                        if (mPay != null) {
-                            mPay.pay(response);
-                        }
+
                     } else if (Constants.PAY_TYPE_ALIPAY.equals(payType)) {
                         try {
                             JSONObject jsonObject = new JSONObject(orderResponse);
@@ -164,8 +170,15 @@ public class PaySdk {
             getOrder(data,GameConfig.WX_APP_ID, GameConfig.WECHAT_PAY_URL);
         } else if (Constants.PAY_TYPE_ALIPAY.equals(paytype)) {
             getOrder(data,GameConfig.ALI_APP_ID, GameConfig.ALI_PAY_URL);
-        } else {
-            LogUtil.e(TAG, "未知的paytype:" + paytype);
+        } else if(Constants.PAY_TYPE_HUAWEI.equals(paytype)){
+//            getOrder(data,GameConfig.HUAWEI_APP_ID, GameConfig.HUAWEI_PAY_URL);
+            OrderResponse response = new OrderResponse();
+            response.setMessage(data);
+            mPay.pay(response);
+            dialog.dismiss();
+        }else {
+            LogUtil.d(TAG, "未知的paytype:" + paytype);
+
         }
     }
 
@@ -187,7 +200,6 @@ public class PaySdk {
             map.put("ProductDesc", goods_name);
             map.put("price", price);
             map.put("total_amount", price);
-//            map.put("total_amount", "0.01");
             map.put("version", AppInfoUtil.getVersionName(activity));
             map.put("PhoneModel", Build.MODEL);
             map.put("expand", "");

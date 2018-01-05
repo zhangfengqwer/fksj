@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">疯狂升级(公测版)</string>
-  <!--<string name="channelName">javgame</string>-->
   <string name="packageLogin">com.javgame.fksj.Login</string>
   <string name="packagePay">com.javgame.fksj.Pay</string>
+  <!--0代表测试服，其他代表正式服-->
+  <string name="isTest">1</string>
 </resources>

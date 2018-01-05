@@ -60,6 +60,11 @@ public class AndroidUtil {
         return value;
     }
 
+//    public static String getBoolResource(Context activity, String name) {
+//
+//    }
+
+
     /**
      * 获取字符串
      *

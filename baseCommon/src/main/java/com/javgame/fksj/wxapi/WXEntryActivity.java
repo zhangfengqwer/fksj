@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.javgame.login.UserSdk;
+import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.CommonUtils;
 import com.javgame.utility.Constants;
 import com.javgame.utility.GameConfig;
@@ -24,7 +26,6 @@ import com.unity3d.player.UnityPlayer;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         //登录返回
         if (resp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
             loginHandler(resp);
-            LogUtil.d(TAG, "点击了登录:");
+            LogUtil.d(TAG, "登录返回");
         }
         //分享返回
         else if (resp.getType() == ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX) {
@@ -102,7 +103,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 map.put("appId", GameConfig.WX_APP_ID);
                 map.put("code", code);
                 map.put("openId", "");
-                LogUtil.d(TAG, "给web发送了请求，code:" + code);
+                LogUtil.d(TAG, "给web发送了请求:" + new JSONObject(map).toString());
 
                 OkHttpUtils
                         .postString()
@@ -114,30 +115,25 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                             @Override
                             public void onError(Request request, Exception e) {
-                                LogUtil.d(TAG, "onError" + request.toString() + "\ne" + e.toString());
+                                LogUtil.d(TAG, "onError:" + request.toString() + "\ne:" + e.toString());
                             }
 
                             @Override
                             public void onResponse(String response) {
-                                LogUtil.d(TAG, "onResponse" + response);
+                                LogUtil.d(TAG, "onResponse:" + response);
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
-
-                                    String data = jsonObject.getString("data");
-                                    JSONObject dataJson = new JSONObject(data);
-                                    int code = dataJson.getInt("code");
-                                    if (code != 1) {
-//                                        CommonUtils.showToast(WXEntryActivity.this, "微信登录web返回失败");
-                                        LogUtil.e(TAG,"微信登录web返回失败");
+                                    WeChatResponse weChatResponse = new Gson().fromJson(response, WeChatResponse.class);
+                                    if (weChatResponse.getCode() != 1) {
+                                        LogUtil.e(TAG, "微信登录web返回失败");
                                         return;
                                     }
-
-                                    nickname = dataJson.getString("name");
-                                    unionid = dataJson.getString("expand");
+                                    nickname = weChatResponse.getName();
+                                    unionid = weChatResponse.getExpand().getUnionid();
                                     handlerResult();
-                                } catch (JSONException e) {
+                                }catch (Exception e){
                                     e.printStackTrace();
                                 }
+
                             }
                         });
                 break;
@@ -155,11 +151,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     private void handlerResult() {
         CommonUtils.showToast(UserSdk.getInstance().getActivity(), "登录成功");
         map = new HashMap<>();
-        map.put("appid", GameConfig.WX_APP_ID);
         map.put("code", unionid);
         map.put("nickname", nickname);
-        map.put("platform", 102 + "");
-        map.put("figureurl", "");
+        map.put("channelname", AppInfoUtil.getChannelName(this));
         Log.d(TAG, new JSONObject(map).toString());
         UserSdk.getInstance().loginResult(new JSONObject(map).toString());
     }

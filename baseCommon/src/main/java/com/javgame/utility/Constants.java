@@ -26,5 +26,6 @@ public class Constants {
     public static String TAG = "FKSJTAG";
     public static final String PAY_TYPE_WX="weixinpay";
     public static final String PAY_TYPE_ALIPAY="alipay";
+    public static final String PAY_TYPE_HUAWEI="huawei";
 //    public static final String[] PAY_TYPE_ARRAY = {PAY_TYPE_WX,PAY_TYPE_ALIPAY};
 }
