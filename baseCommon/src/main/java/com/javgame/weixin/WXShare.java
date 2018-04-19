@@ -3,7 +3,6 @@ package com.javgame.weixin;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Message;
 
 import com.bumptech.glide.Glide;
 import com.javgame.app.R;
@@ -18,8 +17,6 @@ import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-import java.util.concurrent.ExecutionException;
 
 import static com.javgame.utility.AndroidUtil.TAG;
 
@@ -74,7 +71,7 @@ public class WXShare {
 
     public void sendWebPager(String data) {
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = GameConfig.APK_URL;
+        webpage.webpageUrl = GameConfig.webpageUrl;
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "玩游戏就能赢奖，不信来试试！";
         msg.description = data;
@@ -108,12 +105,10 @@ public class WXShare {
 
     public void sendImage(String data) {
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-
                     Bitmap bmp = Glide.with(activity)
                             .load(GameConfig.SHARE_URL)
                             .asBitmap()
@@ -121,8 +116,9 @@ public class WXShare {
                             .into(1280, 720)
                             .get();
                     WXImageObject imgObj = new WXImageObject(bmp);
-                    LogUtil.d(TAG, "GameConfig.SHARE_URL" + GameConfig.SHARE_URL);
+                    LogUtil.d(TAG, "GameConfig.SHARE_URL:" + GameConfig.SHARE_URL);
                     WXMediaMessage msg = new WXMediaMessage();
+
                     msg.mediaObject = imgObj;
 
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, (int) (THUMB_SIZE * 0.5f), (int) (THUMB_SIZE * 0.5f), true);
@@ -139,9 +135,6 @@ public class WXShare {
                 }
             }
         }).start();
-
-//        Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.biaoti_denglujiangli);
-
     }
 
     private String buildTransaction(final String type) {

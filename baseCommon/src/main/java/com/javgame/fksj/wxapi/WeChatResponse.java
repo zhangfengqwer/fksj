@@ -12,10 +12,10 @@ public final class WeChatResponse {
      * name : 张峰
      * nick : 张峰
      * tId : o_6Wn0Zuj36JXiMq75TdpvsUKzWM
-     * url : http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eofpg5atgccSZJcJic85QRJS3vLc3w19EIhjfapt9MEnQUHiaSk4WyQYf1MnRP5Dc0CL0NOqrYP607g/0
+     * url : http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eofpg5atgccSZJcJic85QRJS3vLc3w19EIhjfapt9MEnQUHiaSk4WyQYf1MnRP5Dc0CL0NOqrYP607g/132
      * tgId : null
      * msg : null
-     * expand : {"unionid":"odLBW1SQoLN2yGyixMn660yZacZw","access_token":"5_xsisZ4Q6BcRbhQkwVQ9rRVgOa2H74M2TtCHPpzJCgnCeP6YK5wVAuWLabg1Q5OiRLtvCSFkieH4ZrSoetQZJgSkKqWvrWGCm-t_mGhMudLo","refresh_token":"5_52iDZ-Fu3eghh_zhq_rq9OEPpXZ0KlJgq1dD4BJROm1mgnEEupB_eBuwo9ewFngNuCv6PPbVuuNVZbgCyghcEQH5ffy-6N7SKoDGxZ1uySQ"}
+     * expand : {"unionid":"odLBW1SQoLN2yGyixMn660yZacZw","access_token":"5_ajNP324VyojbmxULrZGQPUBYmAYGBco9JAbP9D9J8aE6TucDnYYxKcArsGQl8w-4ZDSVgehsAhC03YYjT8hmcoV40FjeaDumIlCyP6C81TA","refresh_token":"5_apWS4NTv3UJwRITPcSSLfcBovX50YLMqHM6K3ygT7jCHRJfcj9eLaiQ4K-ovrJUpCDTVdzR8LP4N8vF0Nf2lkYB8i4yasgdH95ZlEbCRPU0"}
      */
 
     private int code;
@@ -94,8 +94,8 @@ public final class WeChatResponse {
     public static class ExpandBean {
         /**
          * unionid : odLBW1SQoLN2yGyixMn660yZacZw
-         * access_token : 5_xsisZ4Q6BcRbhQkwVQ9rRVgOa2H74M2TtCHPpzJCgnCeP6YK5wVAuWLabg1Q5OiRLtvCSFkieH4ZrSoetQZJgSkKqWvrWGCm-t_mGhMudLo
-         * refresh_token : 5_52iDZ-Fu3eghh_zhq_rq9OEPpXZ0KlJgq1dD4BJROm1mgnEEupB_eBuwo9ewFngNuCv6PPbVuuNVZbgCyghcEQH5ffy-6N7SKoDGxZ1uySQ
+         * access_token : 5_ajNP324VyojbmxULrZGQPUBYmAYGBco9JAbP9D9J8aE6TucDnYYxKcArsGQl8w-4ZDSVgehsAhC03YYjT8hmcoV40FjeaDumIlCyP6C81TA
+         * refresh_token : 5_apWS4NTv3UJwRITPcSSLfcBovX50YLMqHM6K3ygT7jCHRJfcj9eLaiQ4K-ovrJUpCDTVdzR8LP4N8vF0Nf2lkYB8i4yasgdH95ZlEbCRPU0
          */
 
         private String unionid;

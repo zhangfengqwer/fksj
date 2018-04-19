@@ -58,14 +58,5 @@ public class SystemManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        String command = "chmod " + "777" + " " + filePath;
-//        Runtime runtime = Runtime.getRuntime();
-//        try {
-//            runtime.exec(command);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
-
 }

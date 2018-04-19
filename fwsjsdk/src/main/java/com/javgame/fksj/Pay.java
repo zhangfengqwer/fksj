@@ -3,6 +3,7 @@ package com.javgame.fksj;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.alipay.sdk.app.EnvUtils;
 import com.javgame.Integration.IActivityListener;
 import com.javgame.alipay.AliPay;
 import com.javgame.login.UserSdk;

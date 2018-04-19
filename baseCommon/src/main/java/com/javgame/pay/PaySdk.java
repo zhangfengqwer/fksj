@@ -9,6 +9,8 @@ import android.os.Message;
 import com.google.gson.Gson;
 import com.javgame.Integration.ComponentFactory;
 import com.javgame.Integration.IActivityListener;
+import com.javgame.Integration.IThirdMethod;
+import com.javgame.utility.AndroidUtil;
 import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.CommonUtils;
 import com.javgame.utility.Constants;
@@ -25,7 +27,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.javgame.utility.Constants.TAG;
@@ -53,6 +57,7 @@ public class PaySdk {
 
     private String shareFriendsCallObj;
     private String shareFriendsCallFunc;
+    private IThirdMethod thirdListener = null;
 
     IActivityListener activityListener;
     private IPay mPay;
@@ -86,11 +91,11 @@ public class PaySdk {
                         try {
                             JSONObject jsonObject = new JSONObject(orderResponse);
                             String data = jsonObject.getString("data");
-                            String message = jsonObject.getString("message");
+                            String message = jsonObject.getString("msg");
                             JSONObject dataJson = new JSONObject(data);
                             int code = dataJson.getInt("_code");
                             int expand = dataJson.getInt("expand");
-                            String signData = dataJson.getString("signData");
+                            String signData = dataJson.getString("Data");
                             if(code != 1){
                                 CommonUtils.showToast(activity, "订单返回失败:" + message);
                                 return;
@@ -144,6 +149,10 @@ public class PaySdk {
                 activityListener.onCreate();
                 LogUtil.i(TAG, "IActivityListener create");
             }
+
+            if (obj instanceof IThirdMethod) {
+                thirdListener = (IThirdMethod) obj;
+            }
         }
     }
 
@@ -167,22 +176,20 @@ public class PaySdk {
         dialog.setCanceledOnTouchOutside(false);
 
         if (Constants.PAY_TYPE_WX.equals(paytype)) {
-            getOrder(data,GameConfig.WX_APP_ID, GameConfig.WECHAT_PAY_URL);
+            getOrder(data,GameConfig.WX_APP_ID, GameConfig.Common_PAY_URL,"10020");
         } else if (Constants.PAY_TYPE_ALIPAY.equals(paytype)) {
-            getOrder(data,GameConfig.ALI_APP_ID, GameConfig.ALI_PAY_URL);
+            getOrder(data,GameConfig.ALI_APP_ID, GameConfig.Common_PAY_URL,"10001");
         } else if(Constants.PAY_TYPE_HUAWEI.equals(paytype)){
-//            getOrder(data,GameConfig.HUAWEI_APP_ID, GameConfig.HUAWEI_PAY_URL);
             OrderResponse response = new OrderResponse();
             response.setMessage(data);
             mPay.pay(response);
             dialog.dismiss();
         }else {
             LogUtil.d(TAG, "未知的paytype:" + paytype);
-
         }
     }
 
-    private void getOrder(String data, String appId, String url) {
+    private void getOrder(String data, String appId, String url,String codePayId) {
         try {
             JSONObject jsonObject = new JSONObject(data);
             String uid = jsonObject.getString("uid");
@@ -198,6 +205,7 @@ public class PaySdk {
             map.put("ProductName", goods_name);
             map.put("ProductNum", goods_num);
             map.put("ProductDesc", goods_name);
+            map.put("codePayId", codePayId);
             map.put("price", price);
             map.put("total_amount", price);
             map.put("version", AppInfoUtil.getVersionName(activity));
@@ -212,6 +220,7 @@ public class PaySdk {
                     .mediaType(MediaType.parse("application/json; charset=utf-8"))
                     .content(new JSONObject(map).toString())
                     .build()
+                    .connTimeOut(10000)
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Request request, Exception e) {
@@ -232,6 +241,18 @@ public class PaySdk {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isThirdSDKQuit() {
+        String[] channels = AndroidUtil.getStringArray(activity, "thirdSdkQuitChannel");
+        List<String> list = Arrays.asList(channels);
+        return list.contains(AppInfoUtil.getChannelName(activity));
+    }
+
+    public void thirdQuit(String data) {
+        if (thirdListener != null) {
+            thirdListener.quit();
         }
     }
 }

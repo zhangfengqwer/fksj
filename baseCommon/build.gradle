@@ -27,5 +27,4 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     compile 'com.google.code.gson:gson:2.6.2'
     compile files('libs/glide-3.7.0.jar')
-    compile 'com.github.tibolte:elasticdownload:1.0.+'
 }

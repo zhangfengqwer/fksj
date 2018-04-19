@@ -7,16 +7,24 @@ import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.javgame.utility.AndroidUtil;
 import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
+import com.javgame.utility.UnityHelper;
 import com.unity3d.player.UnityPlayer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static com.javgame.utility.Constants.TAG;
 
@@ -40,6 +48,27 @@ public class UnityPlayerActivity extends Activity {
         mUnityPlayer.requestFocus();
 
         GameConfig.init(this);
+
+        File rootFile = Environment.getExternalStorageDirectory();
+        String path = rootFile.getPath();
+        File file = new File(rootFile.getPath(),"tlj_config.txt");
+        if (file.exists()){
+            try {
+                FileInputStream stream = new FileInputStream(file);
+                byte[] bytes = new byte[1024];
+                StringBuilder stringBuilder = new StringBuilder();
+                int i;
+                while ((i = stream.read(bytes,0,bytes.length)) > 0){
+                    stringBuilder.append(new String(bytes,0,i));
+                }
+                LogUtil.d(TAG,stringBuilder.toString());
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        LogUtil.d(TAG,path);
         activityHelper.onCreate(this, savedInstanceState);
 
     }

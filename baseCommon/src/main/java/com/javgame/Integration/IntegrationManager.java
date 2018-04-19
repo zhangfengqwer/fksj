@@ -2,26 +2,12 @@ package com.javgame.Integration;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.javgame.login.UserSdk;
 import com.javgame.pay.PaySdk;
 import com.javgame.update.DownLoadApk;
-import com.javgame.update.DownloadService;
-import com.javgame.update.InstallUtil;
-import com.javgame.utility.LogUtil;
 import com.javgame.weixin.WXShare;
-import com.unity3d.player.UnityPlayer;
-
-import static com.javgame.utility.Constants.TAG;
 
 /**
  * @author zhangf
@@ -148,5 +134,13 @@ public class IntegrationManager {
 
     public void downLoadApk() {
         DownLoadApk.getInstance().downLoadApk();
+    }
+
+    public boolean isThirdSDKQuit() {
+       return PaySdk.getInstance().isThirdSDKQuit();
+    }
+
+    public void thirdSDKQuit(Activity activity, String callObj, String callFunc, String data) {
+        PaySdk.getInstance().thirdQuit(data);
     }
 }

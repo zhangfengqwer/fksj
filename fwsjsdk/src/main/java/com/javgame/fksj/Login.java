@@ -22,6 +22,7 @@ import com.javgame.utility.AppInfoUtil;
 import com.javgame.utility.CommonUtils;
 import com.javgame.utility.GameConfig;
 import com.javgame.utility.LogUtil;
+import com.javgame.utility.UnityHelper;
 import com.javgame.weixin.WXShare;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;

@@ -10,8 +10,8 @@ android {
         applicationId "com.javgame.fksj"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 30
-        versionName "1.0.30"
+        versionCode 45
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -21,8 +21,11 @@ android {
     }
 
     productFlavors {
-        weixin {}
-        weixingzh {}
+        tlj{}
+        njmj{}
+        ycmj{}
+        jysj{}
+        gdw{}
         weixinshare {}
         javgame {}
         yunOS{}
@@ -30,6 +33,7 @@ android {
         aiqiyi{}
         hy4399{}
         sougou{}
+        javgame_test{}
     }
 
     productFlavors.all { flavor ->

@@ -87,7 +87,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     break;
             }
         }
-
         finish();
     }
 
@@ -97,7 +96,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             case BaseResp.ErrCode.ERR_OK:
                 //用户同意
                 String code = ((SendAuth.Resp) resp).code;
-
                 Map<String, String> map = new HashMap<>();
                 map.put("gameId", GameConfig.GAME_ID);
                 map.put("appId", GameConfig.WX_APP_ID);
@@ -133,7 +131,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 }catch (Exception e){
                                     e.printStackTrace();
                                 }
-
                             }
                         });
                 break;
